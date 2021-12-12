@@ -410,3 +410,20 @@ create or replace package body zarzadzanie is
             dbms_output.put_line('Podana nazwa wydarzenia gry nie istnieje');
     end usunWydarzenie;
 end zarzadzanie;
+
+--begin
+--    dodawanie.dodajAutoraGry('Maciej', 'Walczykowski');
+--    dodawanie.dodajCzlonkaKlubu('Gandalf', 'Kosteczka', 'Aga', 'Klimek', 10);
+--    dodawanie.dodajDodatek('Zycie', 'Sagrada');
+--    dodawanie.dodajOceneGracza(10, 'Sagrada', 'Aga', 'Klimek', 10);
+--    dodawanie.dodajGracza('Aga', 'Klimek');
+--    dodawanie.dodajGre('Sagrada', 'Maciej', 'Walczykowski', 'RPG');
+--    dodawanie.dodajKlub('Kosteczka');
+--    dodawanie.dodajLokalizacje('Poznan', 'MTP');
+--    dodawanie.dodajPatrona('Kulczyk');
+--    dodawanie.dodajPatronWydarzenia('Pyrkon', 'Kulczyk');
+--    dodawanie.dodajRoleWRozgrywce('Gandalf', 'Pyrkon', 'Aga', 'Klimek', 'Kosteczka', 'Klub2', 'Turniej A', 10, 10);
+--end;
+
+
+
