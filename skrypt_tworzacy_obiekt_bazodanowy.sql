@@ -3,6 +3,39 @@
 --   site:      Oracle Database 12c
 --   type:      Oracle Database 12c
 
+DROP TABLE autorzy_gry CASCADE CONSTRAINTS;
+
+DROP TABLE czlonkowie_klubu CASCADE CONSTRAINTS;
+
+DROP TABLE dodatki CASCADE CONSTRAINTS;
+
+DROP TABLE gracz_gry_oceny CASCADE CONSTRAINTS;
+
+DROP TABLE gracze CASCADE CONSTRAINTS;
+
+DROP TABLE gry CASCADE CONSTRAINTS;
+
+DROP TABLE kluby CASCADE CONSTRAINTS;
+
+DROP TABLE lokalizacje CASCADE CONSTRAINTS;
+
+DROP TABLE patroni_medialni CASCADE CONSTRAINTS;
+
+DROP TABLE patroni_wydarzenia CASCADE CONSTRAINTS;
+
+DROP TABLE rozgrywka_gracze_role CASCADE CONSTRAINTS;
+
+DROP TABLE rozgrywki CASCADE CONSTRAINTS;
+
+DROP TABLE rozgrywki_turniejowe CASCADE CONSTRAINTS;
+
+DROP TABLE turnieje CASCADE CONSTRAINTS;
+
+DROP TABLE typy_gry CASCADE CONSTRAINTS;
+
+DROP TABLE wlasciciele_gry CASCADE CONSTRAINTS;
+
+DROP TABLE wydarzenia CASCADE CONSTRAINTS;
 
 
 -- predefined type, no DDL - MDSYS.SDO_GEOMETRY
@@ -10,74 +43,69 @@
 -- predefined type, no DDL - XMLTYPE
 
 CREATE TABLE autorzy_gry (
-    imiê     VARCHAR2(20 CHAR) NOT NULL,
+    imie     VARCHAR2(20 CHAR) NOT NULL,
     nazwisko VARCHAR2(30 CHAR) NOT NULL
 );
 
-ALTER TABLE autorzy_gry ADD CONSTRAINT autorzy_gry_pk PRIMARY KEY ( imiê,
+ALTER TABLE autorzy_gry ADD CONSTRAINT autorzy_gry_pk PRIMARY KEY ( imie,
                                                                     nazwisko );
 
-CREATE TABLE cz³onkowie_klubu (
-    cz³onek_id      NUMBER NOT NULL,
+CREATE TABLE czlonkowie_klubu (
+    czlonek_id      NUMBER NOT NULL,
     rola            VARCHAR2(30 CHAR) NOT NULL,
-    data_do³¹czenia DATE NOT NULL,
+    data_dolaczenia DATE NOT NULL,
     kluby_nazwa     VARCHAR2(50 CHAR) NOT NULL,
-    gracze_imiê     VARCHAR2(20 CHAR) NOT NULL,
+    gracze_imie     VARCHAR2(20 CHAR) NOT NULL,
     gracze_nazwisko VARCHAR2(30 CHAR) NOT NULL
 );
 
-ALTER TABLE cz³onkowie_klubu ADD CONSTRAINT cz³onek_pk PRIMARY KEY ( cz³onek_id );
+ALTER TABLE czlonkowie_klubu ADD CONSTRAINT czlonek_pk PRIMARY KEY ( czlonek_id );
 
 
---  ERROR: UK name length exceeds maximum allowed length(30) 
-ALTER TABLE cz³onkowie_klubu ADD CONSTRAINT id_cz³onka_klubu UNIQUE ( gracze_imiê,
-                                                                                                     gracze_nazwisko );
+ALTER TABLE czlonkowie_klubu ADD CONSTRAINT id_czlonka_klubu UNIQUE ( gracze_imie,
+                                                                      gracze_nazwisko );
 
 CREATE TABLE dodatki (
-    podtytu³  VARCHAR2(30 CHAR) NOT NULL,
-    gry_tytu³ VARCHAR2(30 CHAR) NOT NULL
+    podtytul  VARCHAR2(30 CHAR) NOT NULL,
+    gry_tytul VARCHAR2(30 CHAR) NOT NULL
 );
 
-ALTER TABLE dodatki ADD CONSTRAINT dodatki_pk PRIMARY KEY ( podtytu³,
-                                                            gry_tytu³ );
+ALTER TABLE dodatki ADD CONSTRAINT dodatki_pk PRIMARY KEY ( podtytul,
+                                                            gry_tytul );
 
 CREATE TABLE gracz_gry_oceny (
     ocena           INTEGER NOT NULL,
-    gry_tytu³       VARCHAR2(30 CHAR) NOT NULL,
-    gracze_imiê     VARCHAR2(20 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
-    gracze_nazwisko VARCHAR2(30 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
+    gry_tytul       VARCHAR2(30 CHAR) NOT NULL,
+    gracze_imie     VARCHAR2(20 CHAR) NOT NULL,
+    gracze_nazwisko VARCHAR2(30 CHAR) NOT NULL,
     gracze_gracz_id NUMBER NOT NULL
 );
 
 ALTER TABLE gracz_gry_oceny
     ADD CONSTRAINT gracz_gry_oceny_pk PRIMARY KEY ( ocena,
-                                                    gracze_imiê,
+                                                    gracze_imie,
                                                     gracze_nazwisko,
-                                                    gry_tytu³ );
+                                                    gry_tytul );
 
 CREATE TABLE gracze (
     gracz_id NUMBER NOT NULL,
-    imiê     VARCHAR2(20 CHAR) NOT NULL,
+    imie     VARCHAR2(20 CHAR) NOT NULL,
     nazwisko VARCHAR2(30 CHAR) NOT NULL
 );
 
 ALTER TABLE gracze ADD CONSTRAINT gracz_pk PRIMARY KEY ( gracz_id );
 
-ALTER TABLE gracze ADD CONSTRAINT gracze_imiê_nazwisko_un UNIQUE ( imiê,
+ALTER TABLE gracze ADD CONSTRAINT gracze_imie_nazwisko_un UNIQUE ( imie,
                                                                    nazwisko );
 
 CREATE TABLE gry (
-    tytu³                VARCHAR2(30 CHAR) NOT NULL,
-    autorzy_gry_imiê     VARCHAR2(20 CHAR) NOT NULL,
+    tytul                VARCHAR2(30 CHAR) NOT NULL,
+    autorzy_gry_imie     VARCHAR2(20 CHAR) NOT NULL,
     autorzy_gry_nazwisko VARCHAR2(30 CHAR) NOT NULL,
     typy_gry_gatunek     VARCHAR2(20 CHAR) NOT NULL
 );
 
-ALTER TABLE gry ADD CONSTRAINT gry_pk PRIMARY KEY ( tytu³ );
+ALTER TABLE gry ADD CONSTRAINT gry_pk PRIMARY KEY ( tytul );
 
 CREATE TABLE kluby (
     klub_id NUMBER NOT NULL,
@@ -107,34 +135,26 @@ CREATE TABLE patroni_wydarzenia (
     patroni_medialni_nazwa VARCHAR2(50 CHAR) NOT NULL
 );
 
-ALTER TABLE patroni_wydarzenia ADD CONSTRAINT patroni_wydarzeñ PRIMARY KEY ( wydarzenia_nazwa,
+ALTER TABLE patroni_wydarzenia ADD CONSTRAINT patroni_wydarzen PRIMARY KEY ( wydarzenia_nazwa,
                                                                              patroni_medialni_nazwa );
 
 CREATE TABLE rozgrywka_gracze_role (
     rola                                      VARCHAR2(30 CHAR) NOT NULL,
     nazwa                                     VARCHAR2(30 CHAR) NOT NULL,
-    imie_gracza              VARCHAR2(20 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL, 
---  ERROR: Column name length exceeds maximum allowed length(30) 
-    nazwisko_gracza          VARCHAR2(30 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
-    nazwa1                                    VARCHAR2(50 CHAR) NOT NULL,
-    nazwa2                                    VARCHAR2(50 CHAR) NOT NULL,
+    imie_gracza                               VARCHAR2(20 CHAR) NOT NULL, 
+    nazwisko_gracza                           VARCHAR2(30 CHAR) NOT NULL,
+    nazwa_klubu_1                             VARCHAR2(50 CHAR) NOT NULL,
+    nazwa_klubu_2                             VARCHAR2(50 CHAR) NOT NULL,
     data                                      DATE NOT NULL, 
---  ERROR: Column name length exceeds maximum allowed length(30) 
-    id_rozgrywki_turniejowej NUMBER NOT NULL,
-    nazwa3                                    VARCHAR2(30 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
-    cz³onkowie_klubu_cz³onek_id               NUMBER NOT NULL
+    id_rozgrywki_turniejowej                  NUMBER NOT NULL,
+    nazwa_turnieju                            VARCHAR2(30 CHAR) NOT NULL,
+    czlonkowie_klubu_czlonek_id               NUMBER NOT NULL
 );
 
 ALTER TABLE rozgrywka_gracze_role
     ADD CONSTRAINT rozgrywka_gracze_role_pk PRIMARY KEY ( nazwa,
-                                                          nazwa1,
-                                                          nazwa2,
+                                                          nazwa_klubu_1,
+                                                          nazwa_klubu_2,
                                                           data,
                                                           rola,
                                                           imie_gracza,
@@ -143,20 +163,12 @@ ALTER TABLE rozgrywka_gracze_role
 CREATE TABLE rozgrywki (
     rozgrywka_id       NUMBER NOT NULL,
     data               DATE NOT NULL,
-    wygrywaj¹cy_gracz  CHAR(50 CHAR),
-    gry_tytu³          VARCHAR2(30 CHAR) NOT NULL,
-    gracze_imiê        VARCHAR2(20 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
-    gracze_nazwisko    VARCHAR2 (30 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
-    gracze_imiê1       VARCHAR2(20 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
-    gracze_nazwisko1   VARCHAR2(30 CHAR)
---  ERROR: VARCHAR2 size not specified 
-     NOT NULL,
+    wygrywajacy_gracz  CHAR(50 CHAR),
+    gry_tytul          VARCHAR2(30 CHAR) NOT NULL,
+    gracze_imie        VARCHAR2(20 CHAR) NOT NULL,
+    gracze_nazwisko    VARCHAR2(30 CHAR) NOT NULL,
+    gracze_imie1       VARCHAR2(20 CHAR) NOT NULL,
+    gracze_nazwisko1   VARCHAR2(30 CHAR) NOT NULL,
     lokalizacje_miasto VARCHAR2(30 CHAR) NOT NULL,
     lokalizacje_obiekt VARCHAR2(30 CHAR) NOT NULL,
     gracze_gracz_id    NUMBER NOT NULL,
@@ -166,19 +178,18 @@ CREATE TABLE rozgrywki (
 ALTER TABLE rozgrywki ADD CONSTRAINT rozgrywka_pk PRIMARY KEY ( rozgrywka_id );
 
 
---  ERROR: UK name length exceeds maximum allowed length(30) 
 ALTER TABLE rozgrywki
-    ADD CONSTRAINT id_rozgrywki UNIQUE ( gry_tytu³,
-                                                                                                                  gracze_imiê1,
-                                                                                                                  gracze_nazwisko1,
-                                                                                                                  gracze_imiê,
-                                                                                                                  gracze_nazwisko,
-                                                                                                                  data );
+    ADD CONSTRAINT id_rozgrywki UNIQUE ( gry_tytul,
+                                         gracze_imie1,
+                                         gracze_nazwisko1,
+                                         gracze_imie,
+                                         gracze_nazwisko,
+                                         data );
 
 CREATE TABLE rozgrywki_turniejowe (
     rozgrywka_turniej_id NUMBER NOT NULL,
     data                 DATE NOT NULL,
-    wygrywaj¹cy_klub     VARCHAR2(50 CHAR),
+    wygrywajacy_klub     VARCHAR2(50 CHAR),
     kluby_nazwa          VARCHAR2(50 CHAR) NOT NULL,
     kluby_nazwa1         VARCHAR2(50 CHAR) NOT NULL,
     turnieje_nazwa       VARCHAR2(30 CHAR) NOT NULL,
@@ -189,12 +200,11 @@ CREATE TABLE rozgrywki_turniejowe (
 ALTER TABLE rozgrywki_turniejowe ADD CONSTRAINT rozgrywka_turniej_pk PRIMARY KEY ( rozgrywka_turniej_id );
 
 
---  ERROR: UK name length exceeds maximum allowed length(30) 
 ALTER TABLE rozgrywki_turniejowe
     ADD CONSTRAINT id_rozgrywki_turniejowej UNIQUE ( turnieje_nazwa,
-                                                                                                 kluby_nazwa,
-                                                                                                 kluby_nazwa1,
-                                                                                                 data );
+                                                     kluby_nazwa,
+                                                     kluby_nazwa1,
+                                                     data );
 
 CREATE TABLE turnieje (
     nazwa              VARCHAR2(30 CHAR) NOT NULL,
@@ -212,23 +222,23 @@ CREATE TABLE typy_gry (
 
 ALTER TABLE typy_gry ADD CONSTRAINT typy_gry_pk PRIMARY KEY ( gatunek );
 
-CREATE TABLE w³aœciciele_gry (
-    gracze_imiê     VARCHAR2(20 CHAR),
+CREATE TABLE wlasciciele_gry (
+    gracze_imie     VARCHAR2(20 CHAR),
     gracze_nazwisko VARCHAR2(30 CHAR),
     kluby_nazwa     VARCHAR2(50 CHAR),
-    gry_tytu³       VARCHAR2(30 CHAR) NOT NULL,
+    gry_tytul       VARCHAR2(30 CHAR) NOT NULL,
     koszt_zakupu    FLOAT
 );
 
-ALTER TABLE w³aœciciele_gry
-    ADD CONSTRAINT arc_1 CHECK ( ( ( gracze_imiê IS NOT NULL )
+ALTER TABLE wlasciciele_gry
+    ADD CONSTRAINT arc_1 CHECK ( ( ( gracze_imie IS NOT NULL )
                                    AND ( gracze_nazwisko IS NOT NULL )
                                    AND ( kluby_nazwa IS NULL ) )
                                  OR ( ( kluby_nazwa IS NOT NULL )
-                                      AND ( gracze_imiê IS NULL )
+                                      AND ( gracze_imie IS NULL )
                                       AND ( gracze_nazwisko IS NULL ) ) );
 
-ALTER TABLE w³aœciciele_gry ADD CONSTRAINT w³aœciciele_gry_pk PRIMARY KEY ( gry_tytu³ );
+ALTER TABLE wlasciciele_gry ADD CONSTRAINT wlasciciele_gry_pk PRIMARY KEY ( gry_tytul );
 
 CREATE TABLE wydarzenia (
     nazwa       VARCHAR2(30 CHAR) NOT NULL,
@@ -237,53 +247,50 @@ CREATE TABLE wydarzenia (
 
 ALTER TABLE wydarzenia ADD CONSTRAINT wydarzenia_pk PRIMARY KEY ( nazwa );
 
-ALTER TABLE cz³onkowie_klubu
-    ADD CONSTRAINT cz³onkowie_klubu_gracze_fk FOREIGN KEY ( gracze_imiê,
+ALTER TABLE czlonkowie_klubu
+    ADD CONSTRAINT czlonkowie_klubu_gracze_fk FOREIGN KEY ( gracze_imie,
                                                             gracze_nazwisko )
-        REFERENCES gracze ( imiê,
+        REFERENCES gracze ( imie,
                             nazwisko );
 
-ALTER TABLE cz³onkowie_klubu
-    ADD CONSTRAINT cz³onkowie_klubu_kluby_fk FOREIGN KEY ( kluby_nazwa )
+ALTER TABLE czlonkowie_klubu
+    ADD CONSTRAINT czlonkowie_klubu_kluby_fk FOREIGN KEY ( kluby_nazwa )
         REFERENCES kluby ( nazwa );
 
 ALTER TABLE dodatki
-    ADD CONSTRAINT dodatki_gry_fk FOREIGN KEY ( gry_tytu³ )
-        REFERENCES gry ( tytu³ );
+    ADD CONSTRAINT dodatki_gry_fk FOREIGN KEY ( gry_tytul )
+        REFERENCES gry ( tytul );
 
 ALTER TABLE gracz_gry_oceny
     ADD CONSTRAINT gracz_gry_oceny_gracze_fk FOREIGN KEY ( gracze_gracz_id )
         REFERENCES gracze (gracz_id );
 
 ALTER TABLE gracz_gry_oceny
-    ADD CONSTRAINT gracz_gry_oceny_gry_fk FOREIGN KEY ( gry_tytu³ )
-        REFERENCES gry ( tytu³ );
+    ADD CONSTRAINT gracz_gry_oceny_gry_fk FOREIGN KEY ( gry_tytul )
+        REFERENCES gry ( tytul );
 
 ALTER TABLE gry
-    ADD CONSTRAINT gry_autorzy_gry_fk FOREIGN KEY ( autorzy_gry_imiê,
+    ADD CONSTRAINT gry_autorzy_gry_fk FOREIGN KEY ( autorzy_gry_imie,
                                                     autorzy_gry_nazwisko )
-        REFERENCES autorzy_gry ( imiê,
+        REFERENCES autorzy_gry ( imie,
                                  nazwisko );
 
 ALTER TABLE gry
     ADD CONSTRAINT gry_typy_gry_fk FOREIGN KEY ( typy_gry_gatunek )
         REFERENCES typy_gry ( gatunek );
 
---  ERROR: FK name length exceeds maximum allowed length(30) 
 ALTER TABLE patroni_wydarzenia
     ADD CONSTRAINT id_patrona_fk FOREIGN KEY ( patroni_medialni_nazwa )
         REFERENCES patroni_medialni ( nazwa );
 
 ALTER TABLE patroni_wydarzenia
-    ADD CONSTRAINT patroni_wydarzeñ_wydarzenia_fk FOREIGN KEY ( wydarzenia_nazwa )
+    ADD CONSTRAINT patroni_wydarzen_wydarzenia_fk FOREIGN KEY ( wydarzenia_nazwa )
         REFERENCES wydarzenia ( nazwa );
 
---  ERROR: FK name length exceeds maximum allowed length(30) 
 ALTER TABLE rozgrywka_gracze_role
-    ADD CONSTRAINT id_roli_gracza_fk FOREIGN KEY ( cz³onkowie_klubu_cz³onek_id )
-        REFERENCES cz³onkowie_klubu ( cz³onek_id );
+    ADD CONSTRAINT id_roli_gracza_fk FOREIGN KEY ( czlonkowie_klubu_czlonek_id )
+        REFERENCES czlonkowie_klubu ( czlonek_id );
 
---  ERROR: FK name length exceeds maximum allowed length(30) 
 ALTER TABLE rozgrywka_gracze_role
     ADD CONSTRAINT id_rola_rozgrywka_fk FOREIGN KEY ( id_rozgrywki_turniejowej )
         REFERENCES rozgrywki_turniejowe ( rozgrywka_turniej_id );
@@ -297,8 +304,8 @@ ALTER TABLE rozgrywki
         REFERENCES gracze ( gracz_id );
 
 ALTER TABLE rozgrywki
-    ADD CONSTRAINT rozgrywki_gry_fk FOREIGN KEY ( gry_tytu³ )
-        REFERENCES gry ( tytu³ );
+    ADD CONSTRAINT rozgrywki_gry_fk FOREIGN KEY ( gry_tytul )
+        REFERENCES gry ( tytul );
 
 ALTER TABLE rozgrywki
     ADD CONSTRAINT rozgrywki_lokalizacje_fk FOREIGN KEY ( lokalizacje_miasto,
@@ -310,12 +317,10 @@ ALTER TABLE rozgrywki_turniejowe
     ADD CONSTRAINT rozgrywki_turniejowe_kluby_fk FOREIGN KEY ( kluby_nazwa )
         REFERENCES kluby ( nazwa );
 
---  ERROR: FK name length exceeds maximum allowed length(30) 
 ALTER TABLE rozgrywki_turniejowe
     ADD CONSTRAINT id_rozgrywka_klub_fkv1 FOREIGN KEY ( kluby_nazwa1 )
         REFERENCES kluby ( nazwa );
 
---  ERROR: FK name length exceeds maximum allowed length(30) 
 ALTER TABLE rozgrywki_turniejowe
     ADD CONSTRAINT id_nazwa_turnieju_fk FOREIGN KEY ( turnieje_nazwa )
         REFERENCES turnieje ( nazwa );
@@ -330,28 +335,28 @@ ALTER TABLE turnieje
     ADD CONSTRAINT turnieje_wydarzenia_fk FOREIGN KEY ( wydarzenia_nazwa )
         REFERENCES wydarzenia ( nazwa );
 
-ALTER TABLE w³aœciciele_gry
-    ADD CONSTRAINT w³aœciciele_gry_gracze_fk FOREIGN KEY ( gracze_imiê,
+ALTER TABLE wlasciciele_gry
+    ADD CONSTRAINT wlasciciele_gry_gracze_fk FOREIGN KEY ( gracze_imie,
                                                            gracze_nazwisko )
-        REFERENCES gracze ( imiê,
+        REFERENCES gracze ( imie,
                             nazwisko );
 
-ALTER TABLE w³aœciciele_gry
-    ADD CONSTRAINT w³aœciciele_gry_gry_fk FOREIGN KEY ( gry_tytu³ )
-        REFERENCES gry ( tytu³ );
+ALTER TABLE wlasciciele_gry
+    ADD CONSTRAINT wlasciciele_gry_gry_fk FOREIGN KEY ( gry_tytul )
+        REFERENCES gry ( tytul );
 
-ALTER TABLE w³aœciciele_gry
-    ADD CONSTRAINT w³aœciciele_gry_kluby_fk FOREIGN KEY ( kluby_nazwa )
+ALTER TABLE wlasciciele_gry
+    ADD CONSTRAINT wlasciciele_gry_kluby_fk FOREIGN KEY ( kluby_nazwa )
         REFERENCES kluby ( nazwa );
 
-CREATE SEQUENCE cz³onek_cz³onek_id_seq START WITH 1 NOCACHE ORDER;
+CREATE SEQUENCE czlonek_czlonek_id_seq START WITH 1 NOCACHE ORDER;
 
-CREATE OR REPLACE TRIGGER cz³onek_cz³onek_id_trg BEFORE
-    INSERT ON cz³onkowie_klubu
+CREATE OR REPLACE TRIGGER czlonek_czlonek_id_trg BEFORE
+    INSERT ON czlonkowie_klubu
     FOR EACH ROW
-    WHEN ( new.cz³onek_id IS NULL )
+    WHEN ( new.czlonek_id IS NULL )
 BEGIN
-    :new.cz³onek_id := cz³onek_cz³onek_id_seq.nextval;
+    :new.czlonek_id := czlonek_czlonek_id_seq.nextval;
 END;
 /
 
@@ -432,7 +437,7 @@ END;
 -- CREATE TABLESPACE                        0
 -- CREATE USER                              0
 -- 
--- DROP TABLESPACE                          0
+-- DROP TABLESPACE                         17
 -- DROP DATABASE                            0
 -- 
 -- REDACTION POLICY                         0
@@ -442,5 +447,5 @@ END;
 -- ORDS ENABLE SCHEMA                       0
 -- ORDS ENABLE OBJECT                       0
 -- 
--- ERRORS                                  19
+-- ERRORS                                   0
 -- WARNINGS                                 0
